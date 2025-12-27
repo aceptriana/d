@@ -2,28 +2,28 @@ import { Link } from 'react-router-dom';
 import { Play } from 'lucide-react';
 
 export default function DramaCard({ drama }) {
-    const title = drama.title || drama.drama_title || drama.book_name || 'Untitled';
-    const cover = drama.cover || drama.cover_image || drama.cover_url || 'https://placehold.co/300x450';
-    const id = drama.bookId || drama.id || drama.book_id;
+  const title = drama.title || drama.drama_title || drama.book_name || drama.name || drama.bookName || 'Untitled';
+  const cover = drama.cover || drama.cover_image || drama.cover_url || drama.coverWap || 'https://placehold.co/300x450';
+  const id = drama.bookId || drama.id || drama.book_id;
 
-    if (!id) return null;
+  if (!id) return null;
 
-    return (
-        <Link to={`/detail/${id}`} className="drama-card">
-            <div className="card-image">
-                <img src={cover} alt={title} loading="lazy" />
-                <div className="overlay">
-                    <Play size={48} fill="white" className="play-icon" />
-                </div>
-                {drama.is_vip && <span className="vip-badge">VIP</span>}
-                {(drama.total_episodes || drama.chapter_count) && (
-                    <span className="ep-badge">{drama.total_episodes || drama.chapter_count} EP</span>
-                )}
-            </div>
-            <div className="card-content">
-                <h3 className="card-title">{title}</h3>
-            </div>
-            <style>{`
+  return (
+    <Link to={`/detail/${id}`} className="drama-card">
+      <div className="card-image">
+        <img src={cover} alt={title} loading="lazy" />
+        <div className="overlay">
+          <Play size={48} fill="white" className="play-icon" />
+        </div>
+        {drama.is_vip && <span className="vip-badge">VIP</span>}
+        {(drama.total_episodes || drama.chapter_count || drama.chapterCount) && (
+          <span className="ep-badge">{drama.total_episodes || drama.chapter_count || drama.chapterCount} EP</span>
+        )}
+      </div>
+      <div className="card-content">
+        <h3 className="card-title">{title}</h3>
+      </div>
+      <style>{`
         .drama-card {
           display: flex;
           flex-direction: column;
@@ -109,6 +109,6 @@ export default function DramaCard({ drama }) {
           color: var(--primary);
         }
       `}</style>
-        </Link>
-    );
+    </Link>
+  );
 }

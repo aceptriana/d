@@ -14,14 +14,37 @@ export default function Detail() {
         const fetchData = async () => {
             try {
                 const detailRes = await api.getDetail(id);
-                const detailData = detailRes.data || detailRes;
+                // Correctly handle the v2 API structure: { data: { drama: { ... }, chapters: [...] } }
+                const apiData = detailRes.data || detailRes;
 
-                // Sometimes detail comes differently, adjust if needed
-                setDetail(detailData);
+                // If apiData has a 'drama' key, that's where the info is.
+                const dramaInfo = apiData.drama || apiData;
 
-                const chapRes = await api.getChapters(id);
-                const chapData = chapRes.data || chapRes;
-                setChapters(Array.isArray(chapData) ? chapData : (chapData.list || []));
+                // Normalize the data
+                const normalizedDetail = {
+                    ...dramaInfo,
+                    title: dramaInfo.bookName || dramaInfo.title || dramaInfo.name,
+                    cover_image: dramaInfo.cover || dramaInfo.cover_image || dramaInfo.coverWap,
+                    introduction: dramaInfo.introduction || dramaInfo.intro || dramaInfo.brief,
+                    total_chapter: dramaInfo.chapterCount || dramaInfo.total_chapter,
+                    score: dramaInfo.score || '9.0',
+                    category: dramaInfo.tags?.map(t => t.tagName).join(', ') || dramaInfo.category
+                };
+
+                setDetail(normalizedDetail);
+
+                // Chapters might be in apiData.chapters or separate
+                const chapList = apiData.chapters || dramaInfo.chapters || [];
+
+                // If chapters are missing in detail response, fetch them separately
+                if (chapList.length > 0) {
+                    setChapters(chapList);
+                } else {
+                    const chapRes = await api.getChapters(id);
+                    const chapData = chapRes.data || chapRes;
+                    setChapters(Array.isArray(chapData) ? chapData : (chapData.list || []));
+                }
+
             } catch (err) {
                 console.error(err);
             } finally {

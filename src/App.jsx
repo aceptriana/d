@@ -18,6 +18,8 @@ function ScrollToTop() {
     return null;
 }
 
+import Footer from './components/Footer';
+
 function App() {
     return (
         <div className="app">
@@ -31,6 +33,7 @@ function App() {
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/category/:id" element={<CategoryDetail />} />
             </Routes>
+            <Footer />
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'https://dramabox-api-rho.vercel.app';
+const API_BASE = '';
 
 export const api = {
     getHome: async (page = 1, size = 10) => {

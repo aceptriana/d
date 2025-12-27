@@ -25,21 +25,33 @@ export default function Watch() {
         setUrl(null);
         // Fetch stream link
         api.getStream(id, episode).then(res => {
-            // API might return { data: { url: '...' } } or { url: '...' } or just string
-            // Based on user desc: "Mendapatkan link streaming (m3u8/mp4)"
+            console.log("Stream API response:", res); // Debug log
             let streamUrl = null;
-            if (res.data && res.data.url) streamUrl = res.data.url;
-            else if (res.url) streamUrl = res.url;
-            else if (typeof res.data === 'string') streamUrl = res.data;
+
+            // Handle various likely response structures
+            const data = res.data || res;
+
+            if (typeof data === 'string') {
+                streamUrl = data;
+            } else if (data?.url) {
+                streamUrl = data.url;
+            } else if (data?.chapter?.video) {
+                // Structure from user example: data.chapter.video.m3u8 / mp4
+                const video = data.chapter.video;
+                streamUrl = video.m3u8 || video.mp4;
+            } else if (data?.videoUrl) {
+                streamUrl = data.videoUrl;
+            }
 
             if (streamUrl) {
                 setUrl(streamUrl);
             } else {
-                console.error("Invalid stream response", res);
+                console.warn("No stream URL found in response", res);
+                // Don't set URL, let it show the error state or handle it
             }
             setLoading(false);
         }).catch(err => {
-            console.error(err);
+            console.error("Stream fetch error:", err);
             setLoading(false);
         });
     }, [id, episode]);
@@ -95,7 +107,7 @@ export default function Watch() {
                     ) : (
                         <div className="player-error">
                             <p>Gagal memuat video.</p>
-                            <p style={{ fontSize: '0.9rem', color: '#666' }}>Mungkin episode ini terkunci (VIP) atau belum tersedia.</p>
+                            <p style={{ fontSize: '0.9rem', color: '#666' }}>Video tidak tersedia, silakan coba episode lain.</p>
                         </div>
                     )}
                 </div>

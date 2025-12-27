@@ -6,31 +6,34 @@ import Navbar from '../components/Navbar';
 
 export default function Home() {
     const [latest, setLatest] = useState([]);
-    const [vip, setVip] = useState([]);
+    const [dubbed, setDubbed] = useState([]);
     const [recommended, setRecommended] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [homeRes, vipRes, recRes] = await Promise.allSettled([
+                const [homeRes, dubbedRes, recRes] = await Promise.allSettled([
                     api.getHome(),
-                    api.getVip(),
+                    api.getDubbed(),
                     api.getRecommend(),
                 ]);
 
+                const extractList = (res) => {
+                    const data = res.value?.data || res.value;
+                    if (!data) return [];
+                    if (Array.isArray(data)) return data;
+                    return data.list || data.book || data.data?.columnVoList?.[0]?.bookList || [];
+                };
+
                 if (homeRes.status === 'fulfilled') {
-                    // Check if data is array or wrapped
-                    const data = homeRes.value.data || homeRes.value;
-                    setLatest(Array.isArray(data) ? data : (data.list || []));
+                    setLatest(extractList(homeRes));
                 }
-                if (vipRes.status === 'fulfilled') {
-                    const data = vipRes.value.data || vipRes.value;
-                    setVip(Array.isArray(data) ? data : (data.list || []));
+                if (dubbedRes.status === 'fulfilled') {
+                    setDubbed(extractList(dubbedRes));
                 }
                 if (recRes.status === 'fulfilled') {
-                    const data = recRes.value.data || recRes.value;
-                    setRecommended(Array.isArray(data) ? data : (data.list || []));
+                    setRecommended(extractList(recRes));
                 }
             } catch (err) {
                 console.error("Failed to fetch data", err);
@@ -71,7 +74,7 @@ export default function Home() {
                             <p className="subtitle">Tempat nonton drama china terlengkap dan gratis.</p>
                         </div>
 
-                        {vip.length > 0 && <Section title="VIP Channel" icon={Flame} data={vip} />}
+                        {dubbed.length > 0 && <Section title="Drama Sulih Suara (Dubbed)" icon={Flame} data={dubbed} />}
                         {recommended.length > 0 && <Section title="Rekomendasi Editor" icon={Star} data={recommended} />}
                         {latest.length > 0 && <Section title="Drama Terbaru" icon={Sparkles} data={latest} />}
                     </>
