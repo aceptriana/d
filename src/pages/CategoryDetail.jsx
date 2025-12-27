@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { api } from '../services/api';
-import Navbar from '../components/Navbar';
+// import Navbar from '../components/Navbar';
 import DramaCard from '../components/DramaCard';
 
 export default function CategoryDetail() {
@@ -21,7 +21,7 @@ export default function CategoryDetail() {
 
     return (
         <>
-            <Navbar />
+// Navbar removed
             <div className="container" style={{ paddingTop: 24, paddingBottom: 48 }}>
                 <h1 className="heading">Kategori {id}</h1>
                 {loading ? <div style={{ textAlign: 'center', padding: 40 }}>Loading...</div> : (

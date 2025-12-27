@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
-import Navbar from '../components/Navbar';
+// import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
 
 export default function Categories() {
@@ -13,9 +13,9 @@ export default function Categories() {
         });
     }, []);
 
+    // Navbar removed
     return (
         <>
-            <Navbar />
             <div className="container" style={{ paddingTop: 24, paddingBottom: 48 }}>
                 <h1 className="heading">Kategori Drama</h1>
                 <div className="cat-grid">

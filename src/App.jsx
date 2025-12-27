@@ -18,22 +18,39 @@ function ScrollToTop() {
     return null;
 }
 
-import Footer from './components/Footer';
+import BottomNavbar from './components/BottomNavbar';
 
 function App() {
+    const { pathname } = useLocation();
+
+    // Hide navbar on watch page if desired, or keep it. 
+    // User requested "pas play vidio buat kaya full screen", maybe meaning the player itself.
+    // Let's keep navbar everywhere for now.
+
     return (
         <div className="app">
             <ScrollToTop />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/detail/:id" element={<Detail />} />
-                <Route path="/watch/:id/:episode" element={<Watch />} />
-                <Route path="/vip" element={<Vip />} />
-                <Route path="/categories" element={<Categories />} />
-                <Route path="/category/:id" element={<CategoryDetail />} />
-            </Routes>
-            <Footer />
+            <div className="main-content">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/detail/:id" element={<Detail />} />
+                    <Route path="/watch/:id/:episode" element={<Watch />} />
+                    <Route path="/vip" element={<Vip />} />
+                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/category/:id" element={<CategoryDetail />} />
+                </Routes>
+            </div>
+            <BottomNavbar />
+            <style>{`
+                .app {
+                    min-height: 100vh;
+                    background: var(--background);
+                }
+                .main-content {
+                    padding-bottom: 80px; /* Space for BottomNavbar */
+                }
+            `}</style>
         </div>
     )
 }

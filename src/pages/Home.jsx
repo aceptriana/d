@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import DramaCard from '../components/DramaCard';
 import { Flame, Star, Sparkles } from 'lucide-react';
-import Navbar from '../components/Navbar';
+// import Navbar from '../components/Navbar';
 
 export default function Home() {
     const [latest, setLatest] = useState([]);
@@ -58,9 +58,10 @@ export default function Home() {
         </section>
     );
 
+    // Navbar removed
     return (
         <>
-            <Navbar />
+
             <div className="container home-page">
                 {loading ? (
                     <div className="loading-state">

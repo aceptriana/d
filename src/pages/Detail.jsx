@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
-import Navbar from '../components/Navbar';
+// import Navbar from '../components/Navbar';
 import { Play, Star, List } from 'lucide-react';
 
 export default function Detail() {
@@ -54,12 +54,12 @@ export default function Detail() {
         fetchData();
     }, [id]);
 
-    if (loading) return <> <Navbar /> <div className="container" style={{ paddingTop: 48, textAlign: 'center' }}>Loading...</div> </>;
-    if (!detail) return <> <Navbar /> <div className="container" style={{ paddingTop: 48, textAlign: 'center' }}>Drama tidak ditemukan</div> </>;
+    if (loading) return <div className="container" style={{ paddingTop: 48, textAlign: 'center' }}>Loading...</div>;
+    if (!detail) return <div className="container" style={{ paddingTop: 48, textAlign: 'center' }}>Drama tidak ditemukan</div>;
 
     return (
         <>
-            <Navbar />
+            {/* Navbar removed */}
             <div className="banner">
                 <img src={detail.cover_image || detail.cover_url || detail.cover} alt="banner" className="banner-bg" />
                 <div className="banner-overlay"></div>
